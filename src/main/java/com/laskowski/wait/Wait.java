@@ -18,7 +18,6 @@ public class Wait {
     private List<Class<? extends Throwable>> exceptionsToIgnore = new ArrayList<>();
     private String message;
     private Clock clock = Clock.systemDefaultZone();
-    private Sleeper sleeper = Sleeper.SYSTEM_SLEEPER;
 
     public Wait withTimeout(Duration timeout) {
         this.timeout = timeout;
@@ -65,9 +64,8 @@ public class Wait {
             }
 
             try {
-                sleeper.sleep(interval);
+                Thread.sleep(interval.toMillis());
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
                 throw new RuntimeException(e);
             }
         }
@@ -85,11 +83,5 @@ public class Wait {
 
     private RuntimeException timeoutException(String message, Throwable lastException) {
         throw new TimeoutException(message, lastException);
-    }
-
-    private interface Sleeper {
-        Sleeper SYSTEM_SLEEPER = duration -> Thread.sleep(duration.toMillis());
-
-        void sleep(Duration duration) throws InterruptedException;
     }
 }
