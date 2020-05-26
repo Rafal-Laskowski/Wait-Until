@@ -1,4 +1,4 @@
-package com.laskowski.wait.exceptions;
+package io.github.rafal.laskowski.wait.exceptions;
 
 public class TimeoutException extends RuntimeException {
 

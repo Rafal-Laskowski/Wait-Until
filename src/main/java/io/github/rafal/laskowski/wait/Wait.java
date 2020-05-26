@@ -1,7 +1,7 @@
-package com.laskowski.wait;
+package io.github.rafal.laskowski.wait;
 
 import com.google.common.base.Throwables;
-import com.laskowski.wait.exceptions.TimeoutException;
+import io.github.rafal.laskowski.wait.exceptions.TimeoutException;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -11,9 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Wait {
-    private final static long DEFAULT_SLEEP_TIMEOUT = 500;
-    private static final Duration DEFAULT_WAIT_DURATION = Duration.ofMillis(DEFAULT_SLEEP_TIMEOUT);
-    private Duration interval = DEFAULT_WAIT_DURATION;
+    private Duration interval = Duration.ofMillis(500);
     private Duration timeout = Duration.ofSeconds(5);
     private List<Class<? extends Throwable>> exceptionsToIgnore = new ArrayList<>();
     private String message;

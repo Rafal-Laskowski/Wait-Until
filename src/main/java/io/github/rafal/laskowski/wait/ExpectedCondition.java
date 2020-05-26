@@ -1,4 +1,4 @@
-package com.laskowski.wait;
+package io.github.rafal.laskowski.wait;
 
 import java.util.function.Supplier;
 
