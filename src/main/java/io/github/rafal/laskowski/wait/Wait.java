@@ -33,12 +33,16 @@ public class Wait {
     }
 
     public <T> T until(ExpectedCondition<T> isTrue) {
+        return until(object -> isTrue.get());
+    }
+
+    public <T, R> R until(ExpectedConditionWithArgument<T, R> isTrue) {
         Instant end = clock.instant().plus(timeout);
 
         Throwable lastException;
         while (true) {
             try {
-                T value = isTrue.get();
+                R value = isTrue.apply(null);
                 if (value != null && (Boolean.class != value.getClass() || Boolean.TRUE.equals(value))) {
                     return value;
                 }
