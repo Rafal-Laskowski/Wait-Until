@@ -9,13 +9,19 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
-public class Wait {
+public abstract class Wait<T> {
     private Duration interval = Duration.ofMillis(500);
     private Duration timeout = Duration.ofSeconds(5);
-    private List<Class<? extends Throwable>> exceptionsToIgnore = new ArrayList<>();
+    private final List<Class<? extends Throwable>> exceptionsToIgnore = new ArrayList<>();
     private String message;
-    private Clock clock = Clock.systemDefaultZone();
+    private final Clock clock = Clock.systemDefaultZone();
+    private T t;
+
+    public Wait(T t) {
+        this.t = t;
+    }
 
     public Wait withTimeout(Duration timeout) {
         this.timeout = timeout;
@@ -32,17 +38,18 @@ public class Wait {
         return this;
     }
 
-    public <T> T until(ExpectedCondition<T> isTrue) {
-        return until(object -> isTrue.get());
+    public Wait pollingEvery(Duration interval) {
+        this.interval = interval;
+        return this;
     }
 
-    public <T, R> R until(ExpectedConditionWithArgument<T, R> isTrue) {
+    protected <R> R until(Function<T, R> isTrue) {
         Instant end = clock.instant().plus(timeout);
 
         Throwable lastException;
         while (true) {
             try {
-                R value = isTrue.apply(null);
+                R value = isTrue.apply(t);
                 if (value != null && (Boolean.class != value.getClass() || Boolean.TRUE.equals(value))) {
                     return value;
                 }
