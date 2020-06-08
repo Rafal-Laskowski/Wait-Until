@@ -9,6 +9,6 @@ public class WaitSupplier<T> extends Wait<Object> {
     }
 
     public T until(Supplier<T> isTrue) {
-        return super.until(object -> isTrue.get());
+        return super.untilIsTrue(object -> isTrue.get());
     }
 }

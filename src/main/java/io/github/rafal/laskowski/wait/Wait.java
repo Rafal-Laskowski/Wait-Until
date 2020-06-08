@@ -43,7 +43,7 @@ public abstract class Wait<T> {
         return this;
     }
 
-    protected <R> R until(Function<T, R> isTrue) {
+    protected <R> R untilIsTrue(Function<T, R> isTrue) {
         Instant end = clock.instant().plus(timeout);
 
         Throwable lastException;
